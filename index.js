@@ -60,7 +60,7 @@ module.exports = function(options) {
                     version: version,
                     minified_url: urljoin(baseuri, filename),
                     source_map: {
-                        buffer: new Buffer(JSON.stringify(sourceMap)),
+                        buffer: new Buffer(JSON.stringify(file)),
                         filename: filename,
                         content_type: 'application/octet-stream'
                     }
