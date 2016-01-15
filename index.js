@@ -55,12 +55,13 @@ module.exports = function(options) {
                 retries: 5
             });
             op.attempt(function() {
+                var _buffer = JSON.stringify(file)
                 needle.post('https://api.rollbar.com/api/1/sourcemap', {
                     access_token: token,
                     version: version,
                     minified_url: urljoin(baseuri, filename),
                     source_map: {
-                        buffer: new Buffer(JSON.stringify(file)),
+                        buffer: new Buffer(_buffer),
                         filename: filename,
                         content_type: 'application/octet-stream'
                     }
