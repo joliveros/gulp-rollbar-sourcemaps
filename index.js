@@ -76,7 +76,11 @@ module.exports = function(options) {
                         util.log(msg);
                         return;
                     }
-                    util.log(filename + ': Rollbar returned ' + (body.result ? body.result : body));
+                    var result = body.result || body
+                    if(result.err)
+                    throw result.message
+                    result = JSON.stringify(result)
+                    util.log(filename + ': Rollbar returned ' + result);
                 });
             });
         }
