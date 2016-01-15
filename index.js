@@ -41,7 +41,7 @@ module.exports = function(options) {
     return through.obj(function(file, encoding, done) {
         var filename
         var sourceMap
-        if(file.relative.match(/.*\.map.*$/)){
+        if(file.relative.match(/.*\.map$/)){
           filename = file.relative
           sourceMap = filename
         }
