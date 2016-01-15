@@ -39,8 +39,15 @@ module.exports = function(options) {
         throw new Error(PLUGIN_NAME + ': options parameter "version" (Source code version) is not set.');
     }
     return through.obj(function(file, encoding, done) {
-        if(file.sourceMap) {
-            var filename = file.relative + '.map';
+        var filename
+        var sourceMap
+        if(file.relative.match(/.*\.map.*$/)){
+          filename = file.relative
+          sourceMap = filename
+        }
+        if(file.sourceMap || filename) {
+            filename = filename || file.relative + '.map';
+            sourceMap = sourceMap || file.sourceMap
             util.log(filename + ': Sending to Rollbar...');
 
             // setup retries
@@ -51,9 +58,9 @@ module.exports = function(options) {
                 needle.post('https://api.rollbar.com/api/1/sourcemap', {
                     access_token: token,
                     version: version,
-                    minified_url: urljoin(baseuri, file.relative),
+                    minified_url: urljoin(baseuri, filename),
                     source_map: {
-                        buffer: new Buffer(JSON.stringify(file.sourceMap)),
+                        buffer: new Buffer(JSON.stringify(sourceMap)),
                         filename: filename,
                         content_type: 'application/octet-stream'
                     }
